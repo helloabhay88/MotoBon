@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa'; // Import right and left arrow icons
 
-
 function Main() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [bikes, setBikes] = useState([]);
@@ -75,51 +74,52 @@ function Main() {
       </div>
       <h1>Featured Bikes</h1>
       <Container className="mt-5">
-      <div style={{ marginTop: '20px', position: 'relative', zIndex: 1 }}>
-        <Carousel
-          prevLabel=""
-          nextLabel=""
-          nextIcon={<FaArrowAltCircleRight className="carousel-control-next-icon position-absolute top-0 start-0 p-3" />}
-          prevIcon={<FaArrowAltCircleLeft className="carousel-control-prev-icon" />}
-        >
-          {[...Array(Math.ceil(bikes.length / 4))].map((_, index) => (
-            <Carousel.Item key={index}>
-              <div className="d-flex justify-content-around">
-                {[...Array(4)].map((_, cardIndex) => {
-                  const bikeIndex = index * 4 + cardIndex;
-                  if (bikeIndex >= bikes.length) return null;
-                  const bike = bikes[bikeIndex];
+        <div style={{ marginTop: '20px', position: 'relative', zIndex: 1 }}>
+          <Carousel
+            prevLabel=""
+            nextLabel=""
+            nextIcon={<FaArrowAltCircleRight className="custom-carousel-control-next-icon" />}
+            prevIcon={<FaArrowAltCircleLeft className="custom-carousel-control-prev-icon" />}
+            className="custom-carousel"
+          >
+            {[...Array(Math.ceil(bikes.length / 4))].map((_, index) => (
+              <Carousel.Item key={index}>
+                <div className="d-flex justify-content-around">
+                  {[...Array(4)].map((_, cardIndex) => {
+                    const bikeIndex = index * 4 + cardIndex;
+                    if (bikeIndex >= bikes.length) return null;
+                    const bike = bikes[bikeIndex];
 
-                  return (
-                    <Card key={bike.reg_no} style={{
-                      width: '300px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                      marginBottom: '20px',
-                      marginRight: '20px'
-                    }}>
-                      <Card.Img
-                        variant="top"
-                        src={`http://localhost:8081/bike_photo_path/${bike.reg_no}.jpg`}
-                        alt={bike.reg_no}
-                        style={{ height: '210px', objectFit: 'cover' }}
-                      />
-                      <Card.Body>
-                        <Card.Title>{bike.bike_name}</Card.Title>
-                        <Card.Text>{bike.description}</Card.Text>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                          <Link to="/Userlogin"><Button variant="primary">Rent</Button></Link>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  );
-                })}
-              </div>
-            </Carousel.Item>
-          ))}
-        </Carousel>
-      </div>
-    </Container>
+                    return (
+                      <Card key={bike.reg_no} style={{
+                        width: '300px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        marginBottom: '20px',
+                        marginRight: '20px'
+                      }}>
+                        <Card.Img
+                          variant="top"
+                          src={`http://localhost:8081/bike_photo_path/${bike.reg_no}.jpg`}
+                          alt={bike.reg_no}
+                          style={{ height: '210px', objectFit: 'cover' }}
+                        />
+                        <Card.Body>
+                          <Card.Title>{bike.bike_name}</Card.Title>
+                          <Card.Text>{bike.description}</Card.Text>
+                          <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Link to="/Userlogin"><Button variant="primary">Rent</Button></Link>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Carousel.Item>
+            ))}
+          </Carousel>
+        </div>
+      </Container>
     </>
   );
 }

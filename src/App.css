@@ -2,6 +2,8 @@
 .view-all-container {
   position: relative;
   z-index: 3; /* Ensure the button container is above other elements */
+  text-align: center;
+  margin-top: 20px;
 }
 
 .view-all-button {
@@ -12,6 +14,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .view-all-button:hover {
@@ -19,8 +22,9 @@
 }
 
 /* General Styles */
-.h1 {
+h1 {
   text-align: center;
+  margin-top: 20px;
 }
 
 .divider {
@@ -94,36 +98,39 @@
   justify-content: center;
 }
 
-.carousel-control-next-icon, .carousel-control-prev-icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
   font-size: 32px; /* Adjust the size as needed */
   color: black; /* Set the color to black or any color you prefer */
 }
 
-.carousel-control-next {
-  right: -80px; /* Adjust this value to move the button further to the right */
-}
-
+.carousel-control-next,
 .carousel-control-prev {
-  left: -80px; /* Adjust this value to move the button further to the left */
-}
-
-.carousel-control-next, .carousel-control-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
   width: auto;
   height: auto;
-}
-
-.carousel-control-next, .carousel-control-prev {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: none; /* Remove any background that might interfere */
+  color: black; /* Ensure the color is set to black or your desired color */
 }
 
-.carousel-control-next:hover, .carousel-control-prev:hover {
+.carousel-control-next {
+  right: -40px; /* Adjust this value to move the button further to the right */
+}
+
+.carousel-control-prev {
+  left: -40px; /* Adjust this value to move the button further to the left */
+}
+
+.carousel-control-next:hover,
+.carousel-control-prev:hover {
   background: none; /* Remove any background that might interfere */
+  color: black; /* Ensure the color remains visible on hover */
 }
 
 .card-body {
