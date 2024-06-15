@@ -1,0 +1,83 @@
+.availability-container {
+    width: 100vw; /* Full width of the viewport */
+    min-height: 100vh; /* Minimum height of the viewport */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('https://wallpapersmug.com/download/1280x960/356073/bike-bmw-r-nine-t-dark.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white; /* Set text color to white */
+    border-top: 10px solid transparent; /* Border style */
+    margin-top: 0px; /* Top margin between border and outside */
+    padding-top: 10px;
+    padding-bottom: 20px;
+    overflow: auto; /* Enable scrolling if content exceeds viewport */
+}
+
+.bike-details-container {
+    max-width: 80%; /* Increase the width to 80% of the viewport */
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background */
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Light transparent border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: white; /* Set text color to white */
+    margin-top: 20px; /* Add margin to separate from header */
+}
+
+.availability-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white; /* Set text color to white */
+    text-align: center;
+}
+
+.bikes-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Remove default list margin */
+}
+
+.bike-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5); /* Light transparent border */
+    padding: 10px 0;
+}
+
+.bike-name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: white; /* Set text color to white */
+}
+
+.availability-status {
+    color: #ccc; /* Set text color to a lighter shade */
+}
+
+.availability-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.3s;
+    color: white; /* Set text color to white */
+}
+
+.availability-button.available {
+    background-color: #4CAF50;
+}
+
+.availability-button.unavailable {
+    background-color: #f44336;
+}
+
+.availability-button:hover {
+    opacity: 0.8;
+}

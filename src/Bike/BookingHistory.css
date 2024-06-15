@@ -1,0 +1,53 @@
+.booking-history-container {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url('https://wallpapersmug.com/download/1280x960/356073/bike-bmw-r-nine-t-dark.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    padding-top: 20px;
+}
+
+.history-heading {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.history-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 80%;
+}
+
+.history-item {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    padding: 20px;
+    color: white;
+}
+
+.history-details p {
+    margin: 5px 0;
+}

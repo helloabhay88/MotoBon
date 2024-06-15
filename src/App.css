@@ -1,0 +1,131 @@
+/* Adjustments for View All Button */
+.view-all-container {
+  position: relative;
+  z-index: 3; /* Ensure the button container is above other elements */
+}
+
+.view-all-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-all-button:hover {
+  background-color: #0056b3;
+}
+
+/* General Styles */
+.h1 {
+  text-align: center;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #ccc;
+  margin-right: 10px;
+}
+
+.navbar-brand-top {
+  position: absolute;
+  top: 7px;
+  left: 3px;
+}
+
+.background-image {
+  background-image: url('./Bike/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.montserrat {
+  padding-top: 50px;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-size: 70px;
+  color: #D2DFEE;
+}
+
+.brand-text {
+  font-size: 30px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+.animated-button {
+  transition: transform 0.2s ease-in-out;
+}
+
+.animated-button:hover {
+  transform: scale(1.05);
+  animation: glow 1s infinite linear;
+}
+
+* {
+  text-align: center;
+}
+
+.brand-text {
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-size: 32px; /* Adjust the size as needed */
+  color: black; /* Set the color to black or any color you prefer */
+}
+
+.carousel-control-next {
+  right: -80px; /* Adjust this value to move the button further to the right */
+}
+
+.carousel-control-prev {
+  left: -80px; /* Adjust this value to move the button further to the left */
+}
+
+.carousel-control-next, .carousel-control-prev {
+  width: auto;
+  height: auto;
+}
+
+.carousel-control-next, .carousel-control-prev {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-control-next:hover, .carousel-control-prev:hover {
+  background: none; /* Remove any background that might interfere */
+}
+
+.card-body {
+  z-index: 1; /* Ensure card content is above default elements */
+}

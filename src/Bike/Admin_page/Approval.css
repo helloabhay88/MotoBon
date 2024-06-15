@@ -1,0 +1,29 @@
+.approval-container {
+    background-image: url('https://wallpaperbat.com/img/182750-black-motorcycle-wallpaper-top-free-black-motorcycle.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    min-height: 100vh;
+    color: #fff; /* Ensures all text is white by default */
+}
+
+.back-button {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.approval-heading {
+    color: #fff; /* Ensures the heading is white */
+}
+
+.approval-table {
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    color: #fff; /* White text color */
+}
+
+.approval-table th,
+.approval-table td {
+    border-color: #555; /* Darker border color */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background for cells */
+    color: #fff; /* White text color */
+}
