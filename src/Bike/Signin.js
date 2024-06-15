@@ -113,6 +113,7 @@ function Signin() {
                                 placeholder="New Password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
+                                minLength={5}
                                 required
                             />
                         </Form.Group>

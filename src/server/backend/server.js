@@ -77,8 +77,9 @@ app.post('/user_signin', upload.single('file'), (req, res) => {
     console.log('Received data:', req.body);
 
     // Prepare SQL query
-    const sql = "INSERT INTO user_login (email, password, address, ph_no, city, state, zip, dl_no, dl_photo_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO user_login (name,email, password, address, ph_no, city, state, zip, dl_no, dl_photo_path) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [
+        req.body.name,
         req.body.email, 
         req.body.password, 
         req.body.address, 
