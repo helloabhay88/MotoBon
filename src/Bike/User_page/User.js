@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+
 function User() {
     const [bikes, setBikes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,6 +24,7 @@ function User() {
     const navigate = useNavigate();
     const [userApproved, setUserApproved] = useState(false); // State to check if user is approved
     const [errorMessage, setErrorMessage] = useState('');
+
     useEffect(() => {
         fetchUserDetails();
         fetchBikes();
@@ -44,6 +46,7 @@ function User() {
                 console.error('Error fetching user details:', err);
             });
     };
+
     const checkUserApproval = () => {
         const userEmail = localStorage.getItem('userEmail'); // Assuming user email is stored in localStorage
         axios.post('http://localhost:8081/check_user_approval', { email: userEmail })
@@ -54,6 +57,7 @@ function User() {
                 console.error('Error checking user approval:', err);
             });
     };
+
     const fetchBikes = () => {
         axios.get('http://localhost:8081/bikedetails')
             .then(response => {
@@ -70,7 +74,7 @@ function User() {
             .then(response => {
                 if (response.data.success) {
                     setBookingHistory(response.data.history);
-                    console.log(response.data.history)
+                    console.log(response.data.history);
                 } else {
                     console.error('Error fetching booking history:', response.data.message);
                 }
@@ -105,7 +109,6 @@ function User() {
             alert('You need to be approved by the admin to rent a bike.');
             return;
         }
-        console.log("fail")
         setSelectedBike(bike);
         setShowBookingOptions(true);
     };
@@ -163,12 +166,23 @@ function User() {
             });
     };
 
+    const handleDropoffDateChange = (date) => {
+        if (pickupDate && new Date(date) < new Date(pickupDate)) {
+            alert('Dropoff date cannot be before pickup date.');
+            setDropoffDate('');
+        } else {
+            setDropoffDate(date);
+        }
+    };
+
     const filteredBikes = bikes.filter(bike =>
         bike.bike_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
     const toggleHistoryPopup = () => {
         setShowHistoryPopup(!showHistoryPopup);
     };
+
     return (
         <div style={{
             backgroundImage: `url(https://images.unsplash.com/photo-1486673748761-a8d18475c757?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
@@ -187,8 +201,7 @@ function User() {
                 </Link>
             </div>
             <div className="position-absolute top-0 end-0 p-3">
-            <Button onClick={toggleHistoryPopup} variant="success" className="mb-3 me-2">Rented History</Button>
-           
+                <Button onClick={toggleHistoryPopup} variant="success" className="mb-3 me-2">Rented History</Button>
                 <Link to="/">
                     <Button onClick={handleLogout} variant="outline-warning" className="mb-3">Logout</Button>
                 </Link>
@@ -224,18 +237,16 @@ function User() {
                             />
                             <Card.Body>
                                 <h4>{bike.bike_name}</h4>
-                                
                                 <h6>{bike.bike_condition}</h6>
                                 <Card.Title>Per Day: ₹{bike.price}</Card.Title>
                                 {!bike.availability ? (
                                     <>
-                                    <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
-                                        Not Available
-                                        
-                                    </div>
-                                    <div>
-                                        <p>Bike Available in {bike.dropoffDate}</p>
-                                    </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
+                                            Not Available
+                                        </div>
+                                        <div>
+                                            <p>Bike Available in {bike.dropoffDate}</p>
+                                        </div>
                                     </>
                                 ) : (
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -320,7 +331,7 @@ function User() {
                             type="date"
                             value={dropoffDate}
                             min={today}
-                            onChange={(e) => setDropoffDate(e.target.value)}
+                            onChange={(e) => handleDropoffDateChange(e.target.value)}
                             style={{
                                 padding: '5px',
                                 borderRadius: '5px',
@@ -342,28 +353,6 @@ function User() {
                     <Button variant="success" onClick={handleBookingConfirmation}>Confirm Booking</Button>
                 </div>
             )}
-
-            {/* <div style={{ marginTop: '40px', width: '100%', maxWidth: '800px', color: 'white' }}>
-                <h2>Booking History</h2>
-                {bookingHistory.length > 0 ? (
-                    bookingHistory.map((history, index) => (
-                        <Card key={index} style={{ marginBottom: '20px' }}>
-                            <Card.Body>
-                                <h4>{history.bike_name}</h4>
-                                <p><strong>Registration Number:</strong> {history.reg_no}</p>
-                                <p><strong>Pickup Date:</strong> {history.pickupdate}</p>
-                                <p><strong>Pickup Time:</strong> {history.pickuptime}</p>
-                                <p><strong>Dropoff Date:</strong> {history.dropoffdate}</p>
-                                <p><strong>Dropoff Time:</strong> {history.dropofftime}</p>
-                                <p><strong>Total Amount:</strong> ₹{history.totalamount}</p>
-                                <p><strong>Booked Date:</strong> {history.booked_date}</p>
-                            </Card.Body>
-                        </Card>
-                    ))
-                ) : (
-                    <p>No booking history available.</p>
-                )}
-            </div> */}
         </div>
     );
 }
