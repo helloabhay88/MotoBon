@@ -114,6 +114,11 @@ function User() {
     };
 
     const handleBookingConfirmation = () => {
+        if (pickupDate === dropoffDate && dropoffTime < pickupTime) {
+            alert('Dropoff time cannot be before pickup time on the same day.');
+            setDropoffTime('');
+        }
+        else{
         const bookingDetails = {
             bikeRegNo: selectedBike.reg_no,
             pickupDate,
@@ -164,6 +169,7 @@ function User() {
             .catch(err => {
                 console.error('Error confirming booking:', err);
             });
+        }
     };
 
     const handleDropoffDateChange = (date) => {
