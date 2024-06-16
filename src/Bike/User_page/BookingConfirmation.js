@@ -87,7 +87,7 @@ function BookingConfirmation() {
                 </Modal.Header>
                 <Modal.Body><h3>Payment successful</h3></Modal.Body>
                 <Modal.Body><h4>Pickup and Dropoff place: </h4>
-                    <p>Motobon Rental, Trivandrum, Kerala, India</p>
+                    <p>On Nearest Motobon Bike Rental, Kerala, India</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
