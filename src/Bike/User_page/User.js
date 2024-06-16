@@ -175,6 +175,15 @@ function User() {
         }
     };
 
+    const handleDropoffTimeChange = (time) => {
+        if (pickupDate === dropoffDate && time < pickupTime) {
+            alert('Dropoff time cannot be before pickup time on the same day.');
+            setDropoffTime('');
+        } else {
+            setDropoffTime(time);
+        }
+    };
+
     const filteredBikes = bikes.filter(bike =>
         bike.bike_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -342,7 +351,7 @@ function User() {
                         <input
                             type="time"
                             value={dropoffTime}
-                            onChange={(e) => setDropoffTime(e.target.value)}
+                            onChange={(e) => handleDropoffTimeChange(e.target.value)}
                             style={{
                                 padding: '5px',
                                 borderRadius: '5px',
