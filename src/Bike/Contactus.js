@@ -44,7 +44,7 @@ function Contactus() {
                     <Col md={{ span: 6, offset: 3 }}>
                     <Link to="/"><Button variant="info">Home</Button></Link>
                         <h1 style={{ color: 'white', textAlign: 'center' }}>Contact Us</h1>
-                        <p style={{ color: 'white', textAlign: 'center' }}>If you have any questions or inquiries, feel free to get in touch with us.</p>
+                        <p style={{ color: 'white', textAlign: 'center' }}>If you have any complaints or suggestions, feel free to get in touch with us.</p>
                     </Col>
                 </Row>
                 <Row>
