@@ -55,6 +55,7 @@ function Userlogin() {
                     navigate('/User');
                 } else {
                     setMessage('Login failed: ' + res.data.message);
+                    
                 }
             })
             .catch(err => {
@@ -77,7 +78,8 @@ function Userlogin() {
                     <Form.Group className="mb-3" controlId="formGroupPassword">
                         <Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
                     </Form.Group>
-                    <Button type="submit" variant="primary" className="mb-3">Sign in</Button>
+                    <Button type="submit" variant="primary" className="mb-3">Sign in</Button><br/>
+                    <Link to="/Signin" style={{ color: 'white' }}>Don't have an account?</Link>
                     <div className="mb-3">
                         {message && <div>{message}</div>}
                     </div>

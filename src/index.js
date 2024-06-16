@@ -13,7 +13,7 @@ import Form_search from './server/frontend/Form_search';
 import Form_modify from './server/frontend/Form_modify';
 import Userlogin from './Bike/Userlogin';
 import Adminlogin from './Bike/Adminlogin';
-import { BrowserRouter as Router,Route,Routes } from 'react-router-dom';
+import { BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import Signin from './Bike/Signin';
 import Contactus from './Bike/Contactus';
 import Admin from './Bike/Admin_page/Admin';
@@ -32,7 +32,6 @@ import { pdfjs } from 'react-pdf';
 
 // Set the workerSrc to a CDN URL
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`;
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
