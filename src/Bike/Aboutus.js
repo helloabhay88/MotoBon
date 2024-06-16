@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-function aboutUs() {
+function AboutUs() {
     return (
         <div
             style={{
@@ -65,4 +65,4 @@ function aboutUs() {
     );
 }
 
-export default aboutUs;
+export default AboutUs;

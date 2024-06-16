@@ -29,38 +29,51 @@ import DeleteBike from './Bike/DeleteBike';
 import BookingHistory from './Bike/BookingHistory';
 import Approval from './Bike/Admin_page/Approval';
 import { pdfjs } from 'react-pdf';
+import { Navigate } from 'react-router-dom';
+import AboutUs from './Bike/Aboutus';
 
-// Set the workerSrc to a CDN URL
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`;
+const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+const PrivateRouteAdmin = ({ component: Component }) => {
+  const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+  return isAdminLoggedIn ? <Component /> : <Navigate to="/Adminlogin" replace />;
+};
+
+// Protected Route component for user
+const PrivateRouteUser = ({ component: Component }) => {
+  const isUserLoggedIn = localStorage.getItem('isUserLoggedIn') === 'true';
+  return isUserLoggedIn ? <Component /> : <Navigate to="/Userlogin" replace />;
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-   {/* <Userlogin/>
-   <Adminlogin/> */}
-   <Router>
+    <Router>
       <Routes>
-      <Route path="/" Component={Main}/>
-      <Route path="/Userlogin" Component={Userlogin}/>
-      <Route path="/Adminlogin" Component={Adminlogin}/>
-      <Route path="/Admin" Component={Admin}/>
-      <Route path="/User" Component={User}/>
-      <Route path="/signin" Component={Signin}/>
-      <Route path="/Form_insert" Component={Formm}/>
-      <Route path="/Form_modify" Component={Form_modify}/>
-      <Route path="/Form_search" Component={Form_search}/>
-      <Route path="/Contact_us" Component={Contactus}/>
-      <Route path="/About_us" Component={aboutus}/>
-      <Route path="/Terms" Component={Terms}/>
-      <Route path="/Complaints" Component={Complaints}/>
-      <Route path="/book" Component={Book}/>
-      <Route path="/available" Component={Availability}/>
-      <Route path="/booking-confirmation" Component={BookingConfirmation}/>
-      <Route path="/delete-bike" Component={DeleteBike}/>
-      <Route path="/Booking-History" Component={BookingHistory}/>
-      <Route path="/approval" Component={Approval}/>
+        <Route path="/" element={<Main />} />
+        <Route path="/Userlogin" element={<Userlogin />} />
+        <Route path="/Adminlogin" element={<Adminlogin />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/Contact_us" element={<Contactus />} />
+        <Route path="/About_us" element={<AboutUs />} />
+        <Route path="/Terms" element={<Terms />} />
+
+        {/* Public Route */}
+        <Route path="/User" element={<PrivateRouteUser component={User} />} />
+
+        {/* Protected Routes */}
+        <Route path="/Admin" element={<PrivateRouteAdmin component={Admin} />} />
+        <Route path="/Form_insert" element={<PrivateRouteAdmin component={Formm} />} />
+        <Route path="/Form_modify" element={<PrivateRouteAdmin component={Form_modify} />} />
+        <Route path="/Form_search" element={<PrivateRouteAdmin component={Form_search} />} />
+        <Route path="/Complaints" element={<PrivateRouteAdmin component={Complaints} />} />
+        <Route path="/book" element={<PrivateRouteAdmin component={Book} />} />
+        <Route path="/available" element={<PrivateRouteAdmin component={Availability} />} />
+        <Route path="/booking-confirmation" element={<PrivateRouteAdmin component={BookingConfirmation} />} />
+        <Route path="/delete-bike" element={<PrivateRouteAdmin component={DeleteBike} />} />
+        <Route path="/Booking-History" element={<PrivateRouteAdmin component={BookingHistory} />} />
+        <Route path="/approval" element={<PrivateRouteAdmin component={Approval} />} />
       </Routes>
-   </Router>
-  
+    </Router>
   </React.StrictMode>
 );
 
