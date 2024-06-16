@@ -7,19 +7,20 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Signin() {
-    const [name,setName]=useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [address, setAddress] = useState('');
     const [ph_no, setPh_no] = useState('');
     const [city, setCity] = useState('');
-    const [state, setState] = useState('');
+    const [state] = useState('Kerala'); // Set Kerala as default and readonly state
     const [zip, setZip] = useState('');
     const [dl_no, setDl_no] = useState('');
     const [resultMessage, setResultMessage] = useState('');
     const [file, setFile] = useState(null);
     const backgroundImageUrl = 'https://images.pexels.com/photos/750817/pexels-photo-750817.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
+
     const style = {
         backgroundImage: `url(${backgroundImageUrl})`,
         backgroundSize: 'cover',
@@ -41,9 +42,23 @@ function Signin() {
     function handleSubmit(event) {
         event.preventDefault();
 
-        // Validate state selection
-        if (state === "Choose...") {
-            alert("Please select a state.");
+        // Validate city selection
+        if (city === "Choose..." || city === "") {
+            alert("Please select a city.");
+            return;
+        }
+
+        // Validate phone number
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(ph_no)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return;
+        }
+
+        // Validate zip code
+        const zipRegex = /^\d+$/;
+        if (!zipRegex.test(zip)) {
+            alert("Please enter a valid numeric zip code.");
             return;
         }
 
@@ -55,7 +70,7 @@ function Signin() {
 
         // Create a FormData object to hold all form fields and file
         const formData = new FormData();
-        formData.append('name',name);
+        formData.append('name', name);
         formData.append('email', email);
         formData.append('password', password);
         formData.append('address', address);
@@ -89,7 +104,7 @@ function Signin() {
                 <Form onSubmit={handleSubmit}>
                     <h1 className="text-center mb-4">Create new Account</h1>
                     <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridName">
+                        <Form.Group as={Col} controlId="formGridName">
                             <Form.Control
                                 type="name"
                                 placeholder="Enter Name"
@@ -97,7 +112,7 @@ function Signin() {
                                 onChange={e => setName(e.target.value)}
                                 required
                             />
-                            </Form.Group>
+                        </Form.Group>
                         <Form.Group as={Col} controlId="formGridEmail">
                             <Form.Control
                                 type="email"
@@ -157,32 +172,34 @@ function Signin() {
                     </Form.Group>
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formGridCity">
-                            <Form.Control
-                                placeholder="City"
+                            <Form.Select
                                 value={city}
                                 onChange={e => setCity(e.target.value)}
                                 required
-                            />
-                        </Form.Group>
-                        <Form.Group as={Col} controlId="formGridState">
-                            <Form.Select
-                                value={state}
-                                onChange={e => setState(e.target.value)}
-                                required
                             >
                                 <option value="Choose...">Choose...</option>
-                                <option value="Kerala">Thiruvananthapuram</option>
-                                <option value="Tamil Nadu">Kochi</option>
-                                <option value="Karnataka">Alappuzha</option>
-                                <option value="Delhi">Palakkad</option>
-                                <option value="Gujarat">Malapuram</option>
+                                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                <option value="Kochi">Kochi</option>
+                                <option value="Alappuzha">Alappuzha</option>
+                                <option value="Palakkad">Palakkad</option>
+                                <option value="Malapuram">Malapuram</option>
                             </Form.Select>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGridState">
+                            <Form.Control
+                                placeholder="State"
+                                value={state}
+                                readOnly
+                                required
+                            />
                         </Form.Group>
                         <Form.Group as={Col} controlId="formGridZip">
                             <Form.Control
                                 placeholder="Zip"
                                 value={zip}
                                 onChange={e => setZip(e.target.value)}
+                                maxLength={6}
+                                minLength={6}
                                 required
                             />
                         </Form.Group>
