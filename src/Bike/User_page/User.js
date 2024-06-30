@@ -24,7 +24,64 @@ function User() {
     const navigate = useNavigate();
     const [userApproved, setUserApproved] = useState(false); // State to check if user is approved
     const [errorMessage, setErrorMessage] = useState('');
+    const [rejectionReason, setRejectionReason] = useState('');
 
+    const [file, setFile] = useState(null);
+    const [rejected, setRejected] = useState(false);
+    const [userPhNo, setUserPhNo] = useState('');
+    const [userAddress, setUserAddress] = useState('');
+    const [userDlNo, setUserDlNo] = useState('');
+
+    useEffect(() => {
+        checkUserRejection();
+    }, []);
+    useEffect(() => {
+        if (rejected) {
+            console.log("Rejection reason:", rejectionReason);
+        }
+    }, [rejected, rejectionReason]);
+    const checkUserRejection = () => {
+        const email = localStorage.getItem('userEmail');
+        axios.post('http://localhost:8081/check_user_approval', { email })
+            .then(response => {
+                console.log(response.data.status)
+                if (response.data.status === 'rejected') {
+                    console.log(response.data.status)
+                    console.log("Rejection reason:", response.data.rejection_reason);
+                setRejectionReason(response.data.rejection_reason);
+                    setRejected(true);
+                }
+            })
+            .catch(err => {
+                console.error('Error checking user approval:', err);
+            });
+    };
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+    const handleReSubmit = () => {
+        const email = localStorage.getItem('userEmail');
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('email', email);
+        formData.append('name', userName);
+        formData.append('ph_no', userPhNo);
+        formData.append('address', userAddress);
+        formData.append('userDlNo', userDlNo); // Include dl_no in the form data
+        axios.put(`http://localhost:8081/reenter_user_details/${email}/${userDlNo}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                alert('Details submitted for re-approval');
+                setRejected(false); // Close the modal after submission
+            })
+            .catch(err => {
+                console.error('Error re-submitting details:', err);
+            });
+    };
+    
     useEffect(() => {
         fetchUserDetails();
         fetchBikes();
@@ -38,6 +95,7 @@ function User() {
             .then(response => {
                 if (response.data.success) {
                     setUserName(response.data.name);
+                    
                 } else {
                     console.error('Error fetching user details:', response.data.message);
                 }
@@ -117,6 +175,9 @@ function User() {
         if (pickupDate === dropoffDate && dropoffTime < pickupTime) {
             alert('Dropoff time cannot be before pickup time on the same day.');
             setDropoffTime('');
+        }
+        else if (pickupDate === dropoffDate && dropoffDate<pickupDate){
+            alert('Pickup date cannot be before dropoff date')
         }
         else{
         const bookingDetails = {
@@ -368,6 +429,55 @@ function User() {
                     <Button variant="success" onClick={handleBookingConfirmation}>Confirm Booking</Button>
                 </div>
             )}
+             <div>
+             <div>
+             {rejected && (
+                  <Modal show={rejected} backdrop="static" keyboard={false}>
+                            <Modal.Header>
+                                <Modal.Title>Re-enter Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                           
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Link to="/">
+                <Button variant="info">Back</Button>
+            </Link>
+            <Link to="/">
+                <Button onClick={handleLogout} variant="outline-warning" className="mb-3">Logout</Button>
+            </Link>
+        </div>
+           
+                                <h2>You have been rejected by the admin. <br/>Reason: {rejectionReason}.<br/> Please re-enter your details.</h2>
+                                <Form>
+                                    <Form.Group controlId="formName">
+                                        <Form.Label>Name</Form.Label>
+                                        <Form.Control type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                                    </Form.Group>
+                                    <Form.Group controlId="formPhone">
+                                        <Form.Label>Phone Number</Form.Label>
+                                        <Form.Control type="text" value={userPhNo} onChange={(e) => setUserPhNo(e.target.value)} />
+                                    </Form.Group>
+                                    <Form.Group controlId="formAddress">
+                                        <Form.Label>Address</Form.Label>
+                                        <Form.Control type="text" value={userAddress} onChange={(e) => setUserAddress(e.target.value)} />
+                                    </Form.Group>
+                                    <Form.Group controlId="formDLNo">
+                                        <Form.Label>Driving License Number</Form.Label>
+                                        <Form.Control type="text" value={userDlNo} onChange={(e) => setUserDlNo(e.target.value)} />
+                                    </Form.Group>
+                                    <Form.Group controlId="formDLFile">
+                                        <Form.Label>Driving License File</Form.Label>
+                                        <Form.Control type="file" onChange={handleFileChange} />
+                                    </Form.Group>
+                                </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="primary" onClick={handleReSubmit}>Submit for Approval</Button>
+                            </Modal.Footer>
+                        </Modal>
+            )}
+        </div>
+        </div>
         </div>
     );
 }

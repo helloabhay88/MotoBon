@@ -2,7 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
-const multer=require('multer')
+const multer=require('multer');
+const formidable = require('formidable');
 app.use(cors());
 app.use(express.json());
 const path=require('path')
@@ -63,8 +64,13 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const dlNumber = req.body.dl_no; // Driving license number from form data
+        console.log(req.body.dl_no)
+        console.log(req.body.name)
+        console.log(dlNumber)
         const fileExtension = path.extname(file.originalname); // Get file extension
+        console.log(fileExtension)
         const fileName = `${dlNumber}${fileExtension}`; // Combine the DL number and file extension
+        console.log(fileName)
         cb(null, fileName);
     }
 });
@@ -492,40 +498,40 @@ app.post('/get_booking_history', (req, res) => {
         }
     });
 });
-app.post('/check_user_approval', (req, res) => {
-    const { email } = req.body;
+// app.post('/check_user_approval', (req, res) => {
+//     const { email } = req.body;
 
-    // Query to fetch user by email and check approval status
-    const query = `SELECT approved FROM user_login WHERE email = ?`;
+//     // Query to fetch user by email and check approval status
+//     const query = `SELECT approved FROM user_login WHERE email = ?`;
 
-    db.query(query, [email], (error, results) => {
-        if (error) {
-            console.error('Error checking user approval:', error);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
+//     db.query(query, [email], (error, results) => {
+//         if (error) {
+//             console.error('Error checking user approval:', error);
+//             return res.status(500).json({ error: 'Internal server error' });
+//         }
 
-        if (results.length === 0) {
+//         if (results.length === 0) {
            
-            return res.status(404).json({ error: 'User not found' });
-        }
+//             return res.status(404).json({ error: 'User not found' });
+//         }
 
-        const approved = results[0].approved === 1; // Assuming isApproved is a BOOLEAN in MySQL
-        console.log("data send")
-        res.json({ approved: approved });
-        console.log(approved)
-    });
-});
-app.get('/get_users_for_approval', (req, res) => {
-    const sql = 'SELECT * FROM user_login WHERE approved = 0'; // Select users where approve field is 0 (false)
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error fetching users:', err);
-            res.status(500).json({ error: 'Error fetching users' });
-        } else {
-            res.json(result);
-        }
-    });
-});
+//         const approved = results[0].approved === 1; // Assuming isApproved is a BOOLEAN in MySQL
+//         console.log("data send")
+//         res.json({ approved: approved });
+//         console.log(approved)
+//     });
+// });
+// app.get('/get_users_for_approval', (req, res) => {
+//     const sql = 'SELECT * FROM user_login WHERE approved = 0'; // Select users where approve field is 0 (false)
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Error fetching users:', err);
+//             res.status(500).json({ error: 'Error fetching users' });
+//         } else {
+//             res.json(result);
+//         }
+//     });
+// });
 
 // Update user approval status
 app.put('/approve_user', (req, res) => {
@@ -553,49 +559,121 @@ app.get('/dl_photo/:filename', (req, res) => {
         }
     });
 });
-app.put('/approve_user_by_email/:email', (req, res) => {
-    const { email } = req.params;
-    const sql = 'UPDATE user_login SET approved = true WHERE email = ?';
-    db.query(sql, email, (err, result) => {
+// app.put('/approve_user_by_email/:email', (req, res) => {
+//     const { email } = req.params;
+//     const sql = 'UPDATE user_login SET approved = true WHERE email = ?';
+//     db.query(sql, email, (err, result) => {
+//         if (err) {
+//             console.error('Error approving user:', err);
+//             res.status(500).json({ error: 'Error approving user' });
+//             return;
+//         }
+//         res.json({ message: 'User approved successfully' });
+//     });
+// });
+
+
+
+
+
+app.get('/get_users_for_approval', (req, res) => {
+    db.query('SELECT * FROM user_login WHERE status = "pending"', (err, results) => {
         if (err) {
-            console.error('Error approving user:', err);
-            res.status(500).json({ error: 'Error approving user' });
-            return;
+            return res.status(500).json({ error: err });
         }
-        res.json({ message: 'User approved successfully' });
+        res.json(results);
     });
 });
+
+// Approve user by email
+app.put('/approve_user_by_email/:email', (req, res) => {
+    const email = req.params.email;
+    db.query('UPDATE user_login SET status = "approved",approved = true WHERE email = ?', [email], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: err });
+        }
+        res.json({ success: true, message: 'User approved successfully' });
+    });
+});
+
+// Reject user by email
+app.put('/reject_user_by_email/:email', (req, res) => {
+    const email = req.params.email;
+    const reason = req.body.reason;
+    console.log(reason)
+    db.query('UPDATE user_login SET status = "rejected", rejection_reason = ? WHERE email = ?', [reason,email], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: err });
+        }
+        res.json({ success: true, message: 'User rejected successfully' });
+    });
+});
+
+// Check if user is approved
+app.post('/check_user_approval', (req, res) => {
+    const email = req.body.email;
+    db.query('SELECT approved, status, rejection_reason FROM user_login WHERE email = ?', [email], (err, results) => {
+        if (err) {
+            console.error('Error checking user approval:', err);
+            return res.status(500).json({ error: err });
+        }
+        if (results.length > 0) {
+            const user = results[0];
+            console.log("Rejection reason:", user.rejection_reason); // Log the rejection reason
+            res.json({ 
+                approved: user.approved === 1, 
+                status: user.status, 
+                rejection_reason: user.rejection_reason 
+            });
+        } else {
+            res.json({ approved: false, status: 'not found', rejection_reason: null });
+        }
+    });
+});
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const storageDL = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos'); // Specify the folder to save driving license photos
+    },
+    filename: function (req, file, cb) {
+        const dlNo = req.params.userDlNo; // Ensure dl_no is coming from req.body
+        console.log('DL No:', dlNo); // Debugging log
+        console.log('email:',req.body.email);
+        console.log('email:',req.params.email);
+        console.log('multer userDlNo',req.params.userDlNo);
+        const fileExtension = path.extname(file.originalname); // Get file extension
+        const fileName = `${dlNo}${fileExtension}`; // Combine driving license number and file extension
+        console.log('File Name:', fileName); // Debugging log
+        cb(null, fileName);
+    }
+});
+
+// Create multer upload instance
+const uploadDL = multer({ storage: storageDL });
+
+// Update user details including driving license path
+app.put('/reenter_user_details/:email/:userDlNo', uploadDL.single('file'), (req, res) => {
+    const email = req.params.email;
+    const { name, ph_no, address, userDlNo } = req.body; // Ensure dl_no is from req.body
+    const dlPhotoPath = req.file ? req.file.path : '';
+    console.log('DL No from Body:', userDlNo); // Debugging log
+    
+    console.log('DL Photo Path:', dlPhotoPath); // Debugging log
+    db.query('UPDATE user_login SET name = ?, ph_no = ?, address = ?, dl_no = ?, dl_photo_path = ?, status = ?,rejection_reason = NULL WHERE email = ?', 
+    [name, ph_no, address, userDlNo, dlPhotoPath, 'pending', email], 
+    (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err });
+        }
+        res.json({ message: 'Details updated and submitted for re-approval' });
+    });
+});
+
 app.listen(8081, () => {
     console.log("Listening on port 8081");
 });
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         // Specify the current directory for file saving
-//         cb(null, './');
-//     },
-//     filename: (req, file, cb) => {
-//         // Use the driving license number as the file name, followed by the file extension
-//         const dlNumber = req.body.dl_no; // Driving license number from the form data
-//         const fileExtension = path.extname(file.originalname); // File extension
-//         const fileName = `${dlNumber}${fileExtension}`; // Combine the dlNumber and fileExtension
-//         cb(null, fileName);
-//     },
-// });
-
-// const upload = multer({ storage });
-
-// // Define the route for file uploads
-// app.post('/user_login', upload.single('pdfFile'), (req, res) => {
-//     const formData = req.body;
-//     const pdfFile = req.file;
-
-//     // Process form data and the uploaded file as needed
-//     console.log('Form data:', formData);
-//     console.log('Uploaded file:', pdfFile);
-
-//     // Send a response indicating a successful file upload
-//     res.send('File upload successful');
-// });
-
 

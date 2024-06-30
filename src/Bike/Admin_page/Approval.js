@@ -3,11 +3,16 @@ import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import './Approval.css'; // Import your CSS file
 
 const Approval = () => {
     const [users, setUsers] = useState([]);
-    
+    const [showRejectModal, setShowRejectModal] = useState(false);
+    const [rejectionEmail, setRejectionEmail] = useState('');
+    const [rejectionReason, setRejectionReason] = useState('');
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -15,6 +20,7 @@ const Approval = () => {
     const fetchUsers = () => {
         axios.get('http://localhost:8081/get_users_for_approval')
             .then(response => {
+                console.log(response.data);
                 setUsers(response.data);
             })
             .catch(error => {
@@ -33,8 +39,19 @@ const Approval = () => {
             });
     };
 
+    const handleReject = () => {
+        axios.put(`http://localhost:8081/reject_user_by_email/${rejectionEmail}`, { reason: rejectionReason })
+            .then(response => {
+                console.log('User rejected successfully');
+                fetchUsers();
+                setShowRejectModal(false);
+            })
+            .catch(error => {
+                console.error('Error rejecting user:', error);
+            });
+    };
+
     const handleViewDL = (dlPath) => {
-        // Append ".pdf" to dl_no if it doesn't already have it
         const dlNoWithExtension = dlPath.endsWith('.pdf') ? dlPath : `${dlPath}.pdf`;
         window.open(`http://localhost:8081/dl_photo/${encodeURIComponent(dlNoWithExtension)}`, '_blank');
     };
@@ -70,14 +87,42 @@ const Approval = () => {
                                 ) : (
                                     <span>Approved</span>
                                 )}
+                                {user.status === 'pending' && (
+                                    <Button className="ms-2" variant="danger" onClick={() => {
+                                        setRejectionEmail(user.email);
+                                        setShowRejectModal(true);
+                                    }}>Reject</Button>
+                                )}
                                 <Button className="ms-2" variant="primary" onClick={() => handleViewDL(user.dl_no)}>
-                                    View License
+                                    View License 
                                 </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
+
+            <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Reject User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formRejectionReason">
+                            <Form.Label>Reason for Rejection</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={rejectionReason}
+                                onChange={(e) => setRejectionReason(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRejectModal(false)}>Close</Button>
+                    <Button variant="danger" onClick={handleReject}>Reject</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
