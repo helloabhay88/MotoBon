@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Signin() {
     const [name, setName] = useState('');
@@ -21,6 +22,7 @@ function Signin() {
     const [file, setFile] = useState(null);
     const backgroundImageUrl = 'https://images.pexels.com/photos/750817/pexels-photo-750817.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
+    const navigate = useNavigate();
     const style = {
         backgroundImage: `url(${backgroundImageUrl})`,
         backgroundSize: 'cover',
@@ -83,7 +85,10 @@ function Signin() {
 
         axios.post('http://localhost:8081/user_signin', formData)
             .then(res => {
-                setResultMessage("Sign in successful! Welcome!");
+                window.alert("Sign in successful! Welcome!");
+
+                // Navigate to UserLogin after clicking OK in alert
+                navigate('/UserLogin');
             })
             .catch(err => {
                 if (err.response && err.response.data && err.response.data.error === 'Duplicate entry') {
@@ -218,9 +223,9 @@ function Signin() {
                     <Button variant="primary" type="submit">
                         Sign up
                     </Button>
-                    <Link to="/Userlogin">
+                    {/* <Link to="/Userlogin">
                         <Button className="m-2" variant="secondary">Log in</Button>
-                    </Link>
+                    </Link> */}
                 </Form>
                 {resultMessage && <p className="mt-3">{resultMessage}</p>}
             </div>

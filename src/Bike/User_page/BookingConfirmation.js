@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 function BookingConfirmation() {
     const location = useLocation();
-    const { totalAmount, bikeName,userName, bikeImage, userEmail, regNo, pickuptime, pickupdate, dropofftime, dropoffdate } = location.state || { totalAmount: 0, bikeName: '', bikeImage: '', userEmail: '', regNo: '', pickuptime: '', pickupdate: '', dropofftime: '', dropoffdate: '', userName: '' };
+    const navigate = useNavigate(); // Initialize useNavigate
+    const { totalAmount, bikeName, userName, bikeImage, userEmail, regNo, pickuptime, pickupdate, dropofftime, dropoffdate,city } = location.state || { totalAmount: 0, bikeName: '', bikeImage: '', userEmail: '', regNo: '', pickuptime: '', pickupdate: '', dropofftime: '', dropoffdate: '', userName: '',city: '' };
 
     const [show, setShow] = useState(false);
     const [userDetails, setUserDetails] = useState({
@@ -32,7 +33,10 @@ function BookingConfirmation() {
     }, [userEmail]);
 
     const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        navigate('/User'); // Navigate to /User page on modal close
+    };
 
     const handlePaymentAndBooking = () => {
         // Send a POST request to your backend to process the booking
@@ -52,7 +56,7 @@ function BookingConfirmation() {
 
         axios.post('http://localhost:8081/process-booking', bookingDetails)
             .then(response => {
-                axios.post('http://localhost:8081/history',bookingDetails)
+                axios.post('http://localhost:8081/history', bookingDetails)
                 console.log(response.data.message); // Assuming your backend sends a message upon successful insertion
                 handleShow(); // Show modal on successful booking
             })
@@ -87,7 +91,7 @@ function BookingConfirmation() {
                 </Modal.Header>
                 <Modal.Body><h3>Payment successful</h3></Modal.Body>
                 <Modal.Body><h4>Pickup and Dropoff place: </h4>
-                    <p>On Nearest Motobon Bike Rental, Kerala, India</p>
+                    <p>On Nearest Motobon Bike Rental, {city}, Kerala</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
@@ -99,4 +103,4 @@ function BookingConfirmation() {
     );
 }
 
-export default BookingConfirmation
+export default BookingConfirmation;

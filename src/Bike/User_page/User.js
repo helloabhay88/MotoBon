@@ -16,6 +16,7 @@ function User() {
     const [pickupTime, setPickupTime] = useState('');
     const [dropoffTime, setDropoffTime] = useState('');
     const [userName, setUserName] = useState('');
+    const [city, setCity] = useState('');
     const [bookingHistory, setBookingHistory] = useState([]);
     const [showHistoryPopup, setShowHistoryPopup] = useState(false);
     const historyModalRef = useRef();
@@ -32,9 +33,43 @@ function User() {
     const [userAddress, setUserAddress] = useState('');
     const [userDlNo, setUserDlNo] = useState('');
 
+
+    const [sortOrder, setSortOrder] = useState('none'); // Default sort order
+  const [filtereddBikes, setFiltereddBikes] = useState(bikes); // Filtered bikes state
+
+  const [historySortOrder, setHistorySortOrder] = useState("newest");
+
+// Sort the bookingHistory based on historySortOrder
+const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
+    if (historySortOrder === "newest") {
+        console.log(new Date(b.booked_date) - new Date(a.booked_date))
+        return new Date(b.booked_date) - new Date(a.booked_date);
+    } else {
+        return new Date(a.booked_date) - new Date(b.booked_date);
+    }
+});
     useEffect(() => {
         checkUserRejection();
     }, []);
+    useEffect(() => {
+        const filteredAndSortedBikes = bikes
+            .filter(bike =>
+                bike.bike_name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .sort((a, b) => {
+                if (sortOrder === 'lowToHigh') {
+                    return a.price - b.price;
+                } else if (sortOrder === 'highToLow') {
+                    return b.price - a.price;
+                } else {
+                    return 0;
+                }
+            });
+    
+        setFiltereddBikes(filteredAndSortedBikes);
+    }, [bikes, searchQuery, sortOrder]);  // Trigger this effect when any of these values change
+    
+    
     useEffect(() => {
         if (rejected) {
             console.log("Rejection reason:", rejectionReason);
@@ -95,7 +130,8 @@ function User() {
             .then(response => {
                 if (response.data.success) {
                     setUserName(response.data.name);
-                    
+                    setCity(response.data.city);
+                    console.log("city is "+response.data.city);
                 } else {
                     console.error('Error fetching user details:', response.data.message);
                 }
@@ -211,6 +247,7 @@ function User() {
                         bikeName: selectedBike.bike_name,
                         bikeImage: `http://localhost:8081/bike_photo_path/${selectedBike.reg_no}.jpg`,
                         userEmail: localStorage.getItem('userEmail'),
+                        city: city,
                         regNo: selectedBike.reg_no,
                         pickuptime: pickupTime,
                         pickupdate: pickupDate,
@@ -293,72 +330,93 @@ function User() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </Form.Group>
+            <>
+      {/* Sort Dropdown */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom: '20px' }}>
+        <Form.Group controlId="sortOrder" style={{ maxWidth: '200px' }}>
+          <Form.Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ fontSize: '0.875rem' }}>
+            <option value="none">Sort by Price</option>
+            <option value="lowToHigh">Low to High</option>
+            <option value="highToLow">High to Low</option>
+          </Form.Select>
+        </Form.Group>
+      </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '20px',
-                justifyContent: 'center',
-            }}>
-                {filteredBikes.map((bike) => {
-                    const imageUrl = `http://localhost:8081/bike_photo_path/${bike.reg_no}.jpg`;
+      {/* Displaying Filtered Bikes */}
+      <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '20px',
+          justifyContent: 'center',
+      }}>
+        {filtereddBikes.map((bike) => {
+          const imageUrl = `http://localhost:8081/bike_photo_path/${bike.reg_no}.jpg`;
 
-                    return (
-                        <Card key={bike.reg_no}>
-                            <Card.Img
-                                variant="top"
-                                src={imageUrl}
-                                alt={bike.reg_no}
-                                style={{ height: '240px', objectFit: 'cover' }}
-                            />
-                            <Card.Body>
-                                <h4>{bike.bike_name}</h4>
-                                <h6>{bike.bike_condition}</h6>
-                                <Card.Title>Per Day: ₹{bike.price}</Card.Title>
-                                {!bike.availability ? (
-                                    <>
-                                        <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>
-                                            Not Available
-                                        </div>
-                                        <div>
-                                            <p>Bike Available in {bike.dropoffDate}</p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Button variant="primary" onClick={() => handleBookNow(bike)}>Book now</Button>
-                                    </div>
-                                )}
-                            </Card.Body>
-                        </Card>
-                    );
-                })}
-            </div>
-            <Modal show={showHistoryPopup} onHide={() => setShowHistoryPopup(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Rented History</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {bookingHistory.length > 0 ? (
-                        <ol>
-                            {bookingHistory.map((booking, index) => (
-                                <li key={index}>
-                                    <p><strong>Bike Name: </strong> {booking.bike_name}</p>
-                                    <p><strong>Pickup Date: </strong> {booking.pickupdate}</p>
-                                    <p><strong>Dropoff Date: </strong> {booking.dropoffdate}</p>
-                                    <p><strong>Total Amount: </strong> ₹{booking.totalamount}</p>
-                                    <p><strong>Booked Date: </strong>{booking.booked_date}</p>
-                                </li>
-                            ))}
-                        </ol>
-                    ) : (
-                        <p>No rental history found.</p>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>Close</Button>
-                </Modal.Footer>
-            </Modal>
+          return (
+            <Card key={bike.reg_no}>
+              <Card.Img
+                variant="top"
+                src={imageUrl}
+                alt={bike.reg_no}
+                style={{ height: '240px', objectFit: 'cover' }}
+              />
+              <Card.Body>
+                <h4>{bike.bike_name}</h4>
+                <h6>{bike.bike_condition}</h6>
+                <Card.Title>Per Day: ₹{bike.price}</Card.Title>
+                {!bike.availability ? (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>Not Available</div>
+                    <div>
+                      <p>Bike Available on {bike.dropoffDate}</p>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="primary" onClick={() => handleBookNow(bike)}>Book now</Button>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
+    </>
+    <Modal show={showHistoryPopup} onHide={() => setShowHistoryPopup(false)}>
+        <Modal.Header closeButton>
+            <Modal.Title>Rented History</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            {/* Dropdown for sorting history */}
+            <Form.Group controlId="historySortOrder" style={{ marginBottom: '10px', maxWidth: '200px' }}>
+                <Form.Select
+                    value={historySortOrder}
+                    onChange={(e) => setHistorySortOrder(e.target.value)}
+                >
+                    <option value="newest">Newest Booking</option>
+                    <option value="oldest">Oldest Booking</option>
+                </Form.Select>
+            </Form.Group>
+            {sortedBookingHistory.length > 0 ? (
+                <ol>
+                    {sortedBookingHistory.map((booking, index) => (
+                        <li key={index}>
+                            <p><strong>Bike Name: </strong> {booking.bike_name}</p>
+                            <p><strong>Pickup Date: </strong> {booking.pickupdate}</p>
+                            <p><strong>Dropoff Date: </strong> {booking.dropoffdate}</p>
+                            <p><strong>Total Amount: </strong> ₹{booking.totalamount}</p>
+                            <p><strong>Booked Date: </strong> {booking.booked_date}</p>
+                        </li>
+                    ))}
+                </ol>
+            ) : (
+                <p>No rental history found.</p>
+            )}
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>Close</Button>
+        </Modal.Footer>
+    </Modal>
             {showBookingOptions && selectedBike && (
                 <div ref={modalRef} style={{
                     position: 'fixed',

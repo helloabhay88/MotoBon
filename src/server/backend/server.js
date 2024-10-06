@@ -6,7 +6,7 @@ const multer=require('multer');
 const formidable = require('formidable');
 app.use(cors());
 app.use(express.json());
-const path=require('path')
+const path=require('path')                                       
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -16,7 +16,7 @@ const db = mysql.createConnection({
 
 const storageBike = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\bike_photos'); // Specify the folder to save bike photos
+        cb(null, 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\bike_photos'); // Specify the folder to save bike photos
     },
     filename: function (req, file, cb) {
         const regNo = req.body.reg_no; // Use the bike's registration number
@@ -28,7 +28,7 @@ const storageBike = multer.diskStorage({
 
 // Initialize multer for bike photo uploads
 const uploadBikePhoto = multer({ storage: storageBike });
-app.use('/bike_photo_path', express.static('C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/'));
+app.use('/bike_photo_path', express.static('C:/Users/Abhay/Desktop/MotoBon/src/Bike/bike_photos/'));
 app.post('/bikeDetails', uploadBikePhoto.single('bike_photo'), (req, res) => {
     const { reg_no, eng_no, chas_no, bike_name,bike_condition, price } = req.body;
     const bike_photo_path = req.file ? req.file.path.replace(/\\/g, '/') : null; // Get the file path from the uploaded file
@@ -60,7 +60,7 @@ app.post('/bikeDetails', uploadBikePhoto.single('bike_photo'), (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos'); // Specify the upload directory
+        cb(null, 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\dl_photos'); // Specify the upload directory
     },
     filename: function (req, file, cb) {
         const dlNumber = req.body.dl_no; // Driving license number from form data
@@ -404,12 +404,12 @@ app.delete('/deleteBike/:reg_no', (req, res) => {
 });
 app.post('/get_user_details', (req, res) => {
     const { email } = req.body;
-    const query = 'SELECT name FROM user_login WHERE email = ?';
+    const query = 'SELECT name,city FROM user_login WHERE email = ?';
     db.query(query, [email], (err, results) => {
         if (err) {
             res.status(500).json({ success: false, message: 'Database query error' });
         } else if (results.length > 0) {
-            res.json({ success: true, name: results[0].name });
+            res.json({ success: true, name: results[0].name, city: results[0].city });
         } else {
             res.json({ success: false, message: 'User not found' });
         }
