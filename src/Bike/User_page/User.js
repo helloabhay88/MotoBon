@@ -42,7 +42,7 @@ function User() {
 // Sort the bookingHistory based on historySortOrder
 const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
     if (historySortOrder === "newest") {
-        console.log(new Date(b.booked_date) - new Date(a.booked_date))
+        
         return new Date(b.booked_date) - new Date(a.booked_date);
     } else {
         return new Date(a.booked_date) - new Date(b.booked_date);
@@ -383,23 +383,15 @@ const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
       </div>
     </>
     <Modal show={showHistoryPopup} onHide={() => setShowHistoryPopup(false)}>
-        <Modal.Header closeButton>
-            <Modal.Title>Rented History</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            {/* Dropdown for sorting history */}
-            <Form.Group controlId="historySortOrder" style={{ marginBottom: '10px', maxWidth: '200px' }}>
-                <Form.Select
-                    value={historySortOrder}
-                    onChange={(e) => setHistorySortOrder(e.target.value)}
-                >
-                    <option value="newest">Newest Booking</option>
-                    <option value="oldest">Oldest Booking</option>
-                </Form.Select>
-            </Form.Group>
-            {sortedBookingHistory.length > 0 ? (
-                <ol>
-                    {sortedBookingHistory.map((booking, index) => (
+    <Modal.Header closeButton>
+        <Modal.Title>Rented History</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {sortedBookingHistory.length > 0 ? (
+            <ol>
+                {sortedBookingHistory
+                    .reverse() // Reversing the order to display the history from bottom to top
+                    .map((booking, index) => (
                         <li key={index}>
                             <p><strong>Bike Name: </strong> {booking.bike_name}</p>
                             <p><strong>Pickup Date: </strong> {booking.pickupdate}</p>
@@ -408,15 +400,18 @@ const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
                             <p><strong>Booked Date: </strong> {booking.booked_date}</p>
                         </li>
                     ))}
-                </ol>
-            ) : (
-                <p>No rental history found.</p>
-            )}
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>Close</Button>
-        </Modal.Footer>
-    </Modal>
+            </ol>
+        ) : (
+            <p>No rental history found.</p>
+        )}
+    </Modal.Body>
+    <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>Close</Button>
+    </Modal.Footer>
+</Modal>
+
+
+
             {showBookingOptions && selectedBike && (
                 <div ref={modalRef} style={{
                     position: 'fixed',
