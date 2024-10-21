@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-
+import { Dropdown } from 'react-bootstrap';
 function User() {
     const [bikes, setBikes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -34,17 +34,19 @@ function User() {
     const [userDlNo, setUserDlNo] = useState('');
 
 
-    const [sortOrder, setSortOrder] = useState('none'); // Default sort order
+    const [sortOrder, setSortOrder] = useState('newest'); // Default sort order
   const [filtereddBikes, setFiltereddBikes] = useState(bikes); // Filtered bikes state
 
   const [historySortOrder, setHistorySortOrder] = useState("newest");
 
 // Sort the bookingHistory based on historySortOrder
-const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
+const displayedBookingHistory = [...bookingHistory].sort((a, b) => {
+    // Combine booked_date and booked_time to create a Date object for comparison
     const dateTimeA = new Date(`${a.booked_date} ${a.booked_time}`);
     const dateTimeB = new Date(`${b.booked_date} ${b.booked_time}`);
-    
-    if (historySortOrder === "newest") {
+
+    // Sort based on sortOrder
+    if (sortOrder === "newest") {
         return dateTimeB - dateTimeA; // Newest first
     } else {
         return dateTimeA - dateTimeB; // Oldest first
@@ -386,32 +388,52 @@ const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
       </div>
     </>
     <Modal show={showHistoryPopup} onHide={() => setShowHistoryPopup(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title>Rented History</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        {sortedBookingHistory.length > 0 ? (
-            <ol>
-                {sortedBookingHistory
-                     // Reversing the order to display the history from bottom to top
-                    .map((booking, index) => (
-                        <li key={index}>
-                            <p><strong>Bike Name: </strong> {booking.bike_name}</p>
-                            <p><strong>Pickup Date: </strong> {booking.pickupdate}</p>
-                            <p><strong>Dropoff Date: </strong> {booking.dropoffdate}</p>
-                            <p><strong>Total Amount: </strong> ₹{booking.totalamount}</p>
-                            <p><strong>Booked Date: </strong> {booking.booked_date}</p>
-                        </li>
-                    ))}
-            </ol>
-        ) : (
-            <p>No rental history found.</p>
-        )}
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>Close</Button>
-    </Modal.Footer>
-</Modal>
+            <Modal.Header closeButton>
+                <Modal.Title>Rented History</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <p className="mb-0"><strong>Sort By:</strong></p>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="outline-secondary" id="dropdown-sort">
+                            {sortOrder === "newest" ? "Newest Booking" : "Oldest Booking"}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => setSortOrder("newest")}>
+                                Newest Booking
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setSortOrder("oldest")}>
+                                Oldest Booking
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
+
+                {displayedBookingHistory.length > 0 ? (
+                    <ol>
+                        {displayedBookingHistory.map((booking, index) => (
+                            <li key={index}>
+                                <p><strong>Bike Name: </strong>{booking.bike_name}</p>
+                                <p><strong>Pickup Date: </strong>{booking.pickupdate}</p>
+                                <p><strong>Dropoff Date: </strong>{booking.dropoffdate}</p>
+                                <p><strong>Total Amount: </strong>₹{booking.totalamount}</p>
+                                <p><strong>Booked Date: </strong>{booking.booked_date}</p>
+                            </li>
+                        ))}
+                    </ol>
+                ) : (
+                    <p>No rental history found.</p>
+                )}
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowHistoryPopup(false)}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
 
 
 
