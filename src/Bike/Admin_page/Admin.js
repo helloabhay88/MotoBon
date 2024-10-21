@@ -43,7 +43,7 @@ function Admin() {
                 </div>
                 <h1 style={{ color: '#fff' }}>Welcome Back</h1>
                 <Link to="/Form_insert">
-                    <Button style={buttonStyle} className="m-3" variant="outline-info">Add Bike</Button>
+                    <Button style={buttonStyle} className="m-3" variant="outline-info">Add Bike</Button><br/>
                 </Link>
                 <Link to="/Form_search">
                     <Button style={buttonStyle} className="m-3" variant="outline-info">View Bike</Button>

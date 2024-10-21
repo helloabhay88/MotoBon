@@ -453,12 +453,17 @@ app.post('/process-booking', (req, res) => {
         res.json({ message: 'Booking successfully processed' });
     });
 });
-app.post('/history',(req,res)=>{
-    const { userEmail,userName, regNo, bikeName, pickuptime, pickupdate, dropofftime, dropoffdate, totalAmount, ph_no, address } = req.body;
-   
-    // Example query to insert booking details into booking_details table
-    const sql = 'INSERT INTO history (email, reg_no, bike_name, pickuptime, pickupdate, dropofftime, dropoffdate, totalamount, ph_no, address,name,booked_date) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [userEmail, regNo, bikeName, pickuptime, pickupdate, dropofftime, dropoffdate, totalAmount, ph_no, address,userName,new Date()], (err, results) => {
+app.post('/history', (req, res) => {
+    const { userEmail, userName, regNo, bikeName, pickuptime, pickupdate, dropofftime, dropoffdate, totalAmount, ph_no, address } = req.body;
+    
+    // Example query to insert booking details into booking_details table including booked_time
+    const sql = 'INSERT INTO history (email, reg_no, bike_name, pickuptime, pickupdate, dropofftime, dropoffdate, totalamount, ph_no, address, name, booked_date, booked_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    
+    // Use the current date for booked_date and the current time for booked_time
+    const currentDate = new Date();
+    const bookedTime = currentDate.toLocaleTimeString(); // Get the current time
+    
+    db.query(sql, [userEmail, regNo, bikeName, pickuptime, pickupdate, dropofftime, dropoffdate, totalAmount, ph_no, address, userName, currentDate, bookedTime], (err, results) => {
         if (err) {
             console.error('Error inserting booking details:', err);
             return res.status(500).json({ error: 'Error inserting booking details' });
@@ -466,7 +471,8 @@ app.post('/history',(req,res)=>{
 
         res.json({ message: 'Booking successfully processed' });
     });
-})
+});
+
 app.get('/bookinghistory', (req, res) => {
     const sql = `
         SELECT 

@@ -41,13 +41,16 @@ function User() {
 
 // Sort the bookingHistory based on historySortOrder
 const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
+    const dateTimeA = new Date(`${a.booked_date} ${a.booked_time}`);
+    const dateTimeB = new Date(`${b.booked_date} ${b.booked_time}`);
+    
     if (historySortOrder === "newest") {
-        
-        return new Date(b.booked_date) - new Date(a.booked_date);
+        return dateTimeB - dateTimeA; // Newest first
     } else {
-        return new Date(a.booked_date) - new Date(b.booked_date);
+        return dateTimeA - dateTimeB; // Oldest first
     }
 });
+
     useEffect(() => {
         checkUserRejection();
     }, []);
@@ -390,7 +393,7 @@ const sortedBookingHistory = [...bookingHistory].sort((a, b) => {
         {sortedBookingHistory.length > 0 ? (
             <ol>
                 {sortedBookingHistory
-                    .reverse() // Reversing the order to display the history from bottom to top
+                     // Reversing the order to display the history from bottom to top
                     .map((booking, index) => (
                         <li key={index}>
                             <p><strong>Bike Name: </strong> {booking.bike_name}</p>
