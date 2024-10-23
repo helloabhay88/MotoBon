@@ -136,6 +136,9 @@ const displayedBookingHistory = [...bookingHistory].sort((a, b) => {
                 if (response.data.success) {
                     setUserName(response.data.name);
                     setCity(response.data.city);
+                    setUserPhNo(response.data.ph_no);
+                    setUserAddress(response.data.address);
+                    setUserDlNo(response.data.dl_no);
                     console.log("city is "+response.data.city);
                 } else {
                     console.error('Error fetching user details:', response.data.message);

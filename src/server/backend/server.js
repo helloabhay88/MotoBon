@@ -404,12 +404,12 @@ app.delete('/deleteBike/:reg_no', (req, res) => {
 });
 app.post('/get_user_details', (req, res) => {
     const { email } = req.body;
-    const query = 'SELECT name,city FROM user_login WHERE email = ?';
+    const query = 'SELECT name,city,ph_no,address,dl_no FROM user_login WHERE email = ?';
     db.query(query, [email], (err, results) => {
         if (err) {
             res.status(500).json({ success: false, message: 'Database query error' });
         } else if (results.length > 0) {
-            res.json({ success: true, name: results[0].name, city: results[0].city });
+            res.json({ success: true, name: results[0].name, city: results[0].city, ph_no: results[0].ph_no, address: results[0].address, dl_no: results[0].dl_no });
         } else {
             res.json({ success: false, message: 'User not found' });
         }
@@ -643,7 +643,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const storageDL = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos'); // Specify the folder to save driving license photos
+        cb(null, 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\dl_photos'); // Specify the folder to save driving license photos
     },
     filename: function (req, file, cb) {
         const dlNo = req.params.userDlNo; // Ensure dl_no is coming from req.body
