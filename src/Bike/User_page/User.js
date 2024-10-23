@@ -223,6 +223,9 @@ const displayedBookingHistory = [...bookingHistory].sort((a, b) => {
         else if (pickupDate === dropoffDate && dropoffDate<pickupDate){
             alert('Pickup date cannot be before dropoff date')
         }
+        else if (pickupDate>dropoffDate){
+            alert('Pickup date cannot be after dropoff date')
+        }
         else{
         const bookingDetails = {
             bikeRegNo: selectedBike.reg_no,

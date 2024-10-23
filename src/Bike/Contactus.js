@@ -51,15 +51,15 @@ function Contactus() {
                     <Col md={{ span: 6, offset: 3 }}>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="formName">
-                                <Form.Control type="text" placeholder="Enter your name" onChange={e => setName(e.target.value)} /><br />
+                                <Form.Control type="text" placeholder="Enter your name" onChange={e => setName(e.target.value)} required/><br />
                             </Form.Group>
 
                             <Form.Group controlId="formEmail">
-                                <Form.Control type="email" placeholder="Enter email" onChange={e => setEmail(e.target.value)} /><br />
+                                <Form.Control type="email" placeholder="Enter email" onChange={e => setEmail(e.target.value)} required/><br />
                             </Form.Group>
 
                             <Form.Group controlId="formMessage">
-                                <Form.Control as="textarea" rows={3} placeholder="Enter your message" onChange={e => setMessage(e.target.value)} /><br />
+                                <Form.Control as="textarea" rows={3} placeholder="Enter your message" onChange={e => setMessage(e.target.value)} required/><br />
                             </Form.Group>
                             
                             <Button variant="primary" type="submit">

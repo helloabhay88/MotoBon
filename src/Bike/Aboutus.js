@@ -47,8 +47,8 @@ function AboutUs() {
                             <p>Abhay S. Babu - Co-Founder & CTO</p>
                             <p>Aby Thomas - Co-Founder & COO</p>
                             <p>Anto B George - CMO</p>
-                            <p>Varun - peone staff</p>
-                            <p>Moncy Varghese - Water Boy</p>
+                            <p>Varun - Vice President</p>
+                            <p>Moncy Varghese - Senior Manager</p>
                         </ul>
                     </Col>
                 </Row>
