@@ -536,7 +536,8 @@ const displayedBookingHistory = [...bookingHistory].sort((a, b) => {
                                     </Form.Group>
                                     <Form.Group controlId="formPhone">
                                         <Form.Label>Phone Number</Form.Label>
-                                        <Form.Control type="text" value={userPhNo} onChange={(e) => setUserPhNo(e.target.value)} />
+                                        <Form.Control type="text" value={userPhNo} onChange={(e) => setUserPhNo(e.target.value)}maxLength={10}
+                            minLength={10} />
                                     </Form.Group>
                                     <Form.Group controlId="formAddress">
                                         <Form.Label>Address</Form.Label>
@@ -544,7 +545,8 @@ const displayedBookingHistory = [...bookingHistory].sort((a, b) => {
                                     </Form.Group>
                                     <Form.Group controlId="formDLNo">
                                         <Form.Label>Driving License Number</Form.Label>
-                                        <Form.Control type="text" value={userDlNo} onChange={(e) => setUserDlNo(e.target.value)} />
+                                        <Form.Control type="text" value={userDlNo} onChange={(e) => setUserDlNo(e.target.value)} maxLength={15}
+                            minLength={15} />
                                     </Form.Group>
                                     <Form.Group controlId="formDLFile">
                                         <Form.Label>Driving License File</Form.Label>
