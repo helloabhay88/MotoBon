@@ -31,12 +31,13 @@ const uploadBikePhoto = multer({ storage: storageBike });
 app.use('/bike_photo_path', express.static('C:/Users/Abhay/Desktop/MotoBon/src/Bike/bike_photos/'));
 app.post('/bikeDetails', uploadBikePhoto.single('bike_photo'), (req, res) => {
     const { reg_no, eng_no, chas_no, bike_name,bike_condition, price } = req.body;
+    console.log("details working....",req.body)
     const bike_photo_path = req.file ? req.file.path.replace(/\\/g, '/') : null; // Get the file path from the uploaded file
 
     // SQL query to insert bike details along with the photo path
     const sql = "INSERT INTO bikedetails (bike_name, reg_no, eng_no, chas_no,bike_condition, price, bike_photo_path) VALUES (?, ?, ?, ?, ?, ?,?)";
     const values = [bike_name, reg_no, eng_no, chas_no,bike_condition, price, bike_photo_path];
-
+    console.log("values are ",values)
     // Execute the query
     db.query(sql, values, (err, data) => {
         if (err) {

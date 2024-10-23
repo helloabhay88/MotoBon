@@ -41,7 +41,7 @@ function Formm() {
         formData.append('price',values.price);
         formData.append('bike_condition',values.bike_condition);
         formData.append('bike_photo', file); // Append the bike photo file
-        
+        console.log("is it working..........",formData);
         try {
             // Send POST request with the FormData
             await axios.post('http://localhost:8081/bikeDetails', formData, {
@@ -99,6 +99,8 @@ function Formm() {
                                 value={values.reg_no}
                                 onChange={handleChange}
                                 required
+                                maxLength={9}
+                                minLength={9}
                             />
                         </Col>
                         <Col>
@@ -120,6 +122,8 @@ function Formm() {
                                 value={values.eng_no}
                                 onChange={handleChange}
                                 required
+                                maxLength={10}
+                                minLength={10}
                             />
                         </Col>
                         <Col>
@@ -129,6 +133,8 @@ function Formm() {
                                 value={values.chas_no}
                                 onChange={handleChange}
                                 required
+                                maxLength={10}
+                                minLength={10}
                             />
                         </Col>
                         <Col>

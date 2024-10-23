@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2024 at 01:30 PM
+-- Generation Time: Oct 23, 2024 at 04:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,8 +49,8 @@ INSERT INTO `admin_login` (`email`, `password`) VALUES
 CREATE TABLE `bikedetails` (
   `bike_name` varchar(30) NOT NULL,
   `reg_no` varchar(15) NOT NULL,
-  `eng_no` int(20) NOT NULL,
-  `chas_no` int(20) NOT NULL,
+  `eng_no` varchar(20) NOT NULL,
+  `chas_no` varchar(20) NOT NULL,
   `price` int(10) NOT NULL,
   `bike_condition` varchar(100) NOT NULL,
   `availability` tinyint(1) NOT NULL DEFAULT 1,
@@ -66,12 +66,12 @@ CREATE TABLE `bikedetails` (
 --
 
 INSERT INTO `bikedetails` (`bike_name`, `reg_no`, `eng_no`, `chas_no`, `price`, `bike_condition`, `availability`, `pickupDate`, `pickupTime`, `dropoffDate`, `dropoffTime`, `bike_photo_path`) VALUES
-('Bajaj Dominar 400', 'KL01BM125', 123456789, 98765423, 600, 'Bike is in great condition, 60 kmpl mileage', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01BM125.jpg'),
-('Bajaj Discover 125 ST', 'KL01BM1255', 2147483647, 2147483647, 500, '', 0, '2024-10-21', '17:59', '2024-10-22', '19:00', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01BM1255.jpg'),
-('Duke 390', 'KL01CK509', 2147483647, 123412341, 600, '', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01CK509.jpg'),
-('Bajaj RS 200', 'KL01CR896', 2147483647, 2147483647, 500, 'Bike has small missing problem, 30 kmpl mileage', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01CR896.jpg'),
-('Yamaha R15', 'KL01GG6547', 4534534, 23423423, 500, 'Bike is in Great condition, 40 kmpl mileage', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01GG6547.jpg'),
-('Royal Enfield Hunter', 'KL02CK2056', 2147483647, 2147483647, 550, '', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL02CK2056.jpg');
+('Bajaj Dominar 400', 'KL01BM125', '123456789', '98765423', 600, 'Bike is in great condition, 60 kmpl mileage', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01BM125.jpg'),
+('Bajaj Discover 125 ST', 'KL01BM1255', '2147483647', '2147483647', 500, '', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01BM1255.jpg'),
+('Duke 390', 'KL01CK509', '2147483647', '123412341', 600, '', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01CK509.jpg'),
+('Bajaj RS 200', 'KL01CR896', '2147483647', '2147483647', 500, 'Bike has small missing problem, 30 kmpl mileage', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL01CR896.jpg'),
+('Hero XPULSEE', 'KL01GH544', 'A98EW35322', 'BER452K233', 900, 'Very good condition', 1, '', '', '', '', 'C:/Users/Abhay/Desktop/MotoBon/src/Bike/bike_photos/KL01GH543.jpg'),
+('Royal Enfield Hunter', 'KL02CK2056', '2147483647', '2147483647', 550, '', 0, '2024-10-25', '20:46', '2024-10-24', '18:52', 'C:/Users/Abhay/Desktop/mini/src/Bike/bike_photos/KL02CK2056.jpg');
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,9 @@ CREATE TABLE `booking_details` (
 --
 
 INSERT INTO `booking_details` (`name`, `email`, `ph_no`, `address`, `reg_no`, `bike_name`, `pickuptime`, `pickupdate`, `dropofftime`, `dropoffdate`, `totalamount`) VALUES
-('Abhay', 'abhaysbabu@gmail.com', '7907694440', 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM1255', 'Bajaj Disc', '17:59', '2024-10-21', '19:00', '2024-10-22', '500');
+('Arjavvv', 'arjav@gmail.com', '1111111111', 'Sisilipuram', 'KL02CK2056', 'Royal Enfi', '20:46', '2024-10-25', '18:52', '2024-10-24', '550'),
+('Arjavvv', 'arjav@gmail.com', '1111111111', 'Sisilipuram', 'KL01GG6547', 'Yamaha R15', '16:59', '2024-10-24', '22:04', '2024-10-24', '500'),
+('Abhay', 'abhaysbabu@gmail.com', '7907694440', 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01GH543', 'Hero XPULS', '22:12', '2024-10-23', '23:12', '2024-10-23', '800');
 
 -- --------------------------------------------------------
 
@@ -120,7 +122,9 @@ INSERT INTO `contact_us` (`name`, `email`, `message`) VALUES
 ('Abhay', 'abhay@gmail.com', 'good'),
 ('Aby', 'abythomas@gmail.com', 'motonbon is a very nice bike rental system, bikes are also on great conditions and decent price also, but there are some suggestions to be made in such as give full tank petrol'),
 ('Anto ', 'binu@gmail.com', 'this site is good'),
-('Varun', 'Varun@gmail.com', 'Nice Bike');
+('Varun', 'Varun@gmail.com', 'Nice Bike'),
+('Aswathy', '', 'wow'),
+('pashu', 'pashu@gmail.com', 'umbaaaaa');
 
 -- --------------------------------------------------------
 
@@ -149,18 +153,15 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`name`, `email`, `ph_no`, `address`, `reg_no`, `bike_name`, `pickuptime`, `pickupdate`, `dropofftime`, `dropoffdate`, `totalamount`, `booked_date`, `booked_time`) VALUES
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM125', 'Bajaj Dominar 400', '18:32', '2024-10-07', '20:32', '2024-10-08', 600, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CK509', 'Duke 390', '19:33', '2024-10-07', '19:33', '2024-10-09', 1200, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM1255', 'Bajaj Discover 125 ST', '19:33', '2024-10-08', '20:33', '2024-10-09', 500, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL02CK2056', 'Royal Enfield Hunter', '20:34', '2024-10-08', '20:34', '2024-10-15', 3850, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01GG6547', 'Yamaha R15', '20:36', '2024-10-07', '20:36', '2024-10-09', 1000, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL02CK2056', 'Royal Enfield Hunter', '19:37', '2024-10-20', '20:37', '2024-10-21', 550, '2024-10-07', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01GG6547', 'Yamaha R15', '11:24', '2024-10-13', '12:24', '2024-10-14', 500, '2024-10-13', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CK509', 'Duke 390', '19:18', '2024-10-21', '21:18', '2024-10-22', 600, '2024-10-21', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM125', 'Bajaj Dominar 400', '22:22', '2024-10-21', '23:22', '2024-10-22', 600, '2024-10-21', ''),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM1255', 'Bajaj Discover 125 ST', '16:53', '2024-10-21', '19:53', '2024-10-22', 500, '2024-10-21', '4:53:53 pm'),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CR896', 'Bajaj RS 200', '20:54', '2024-10-30', '20:54', '2024-11-01', 1000, '2024-10-21', '4:54:22 pm'),
-('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM1255', 'Bajaj Discover 125 ST', '17:59', '2024-10-21', '19:00', '2024-10-22', 500, '2024-10-21', '5:00:05 pm');
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01BM125', 'Bajaj Dominar 400', '18:08', '2024-10-30', '22:08', '2024-10-31', 600, '2024-10-21', '5:09:02 pm'),
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CK509', 'Duke 390', '18:09', '2024-11-01', '20:09', '2024-11-02', 600, '2024-10-21', '5:09:28 pm'),
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CR896', 'Bajaj RS 200', '19:30', '2024-10-21', '19:30', '2024-10-22', 500, '2024-10-21', '5:30:53 pm'),
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL02CK2056', 'Royal Enfield Hunter', '19:31', '2024-10-24', '20:31', '2024-10-25', 550, '2024-10-21', '5:31:19 pm'),
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01CR896', 'Bajaj RS 200', '19:32', '2024-10-30', '21:32', '2024-10-31', 500, '2024-10-21', '5:32:35 pm'),
+('Arjavvv', 'arjav@gmail.com', 1111111111, 'Sisilipuram', 'KL02CK2056', 'Royal Enfield Hunter', '20:46', '2024-10-25', '18:52', '2024-10-24', 550, '2024-10-23', '4:52:26 pm'),
+('Arjavvv', 'arjav@gmail.com', 1111111111, 'Sisilipuram', 'KL01GG6547', 'Yamaha R15', '16:59', '2024-10-24', '22:04', '2024-10-24', 500, '2024-10-23', '5:04:24 pm'),
+('Arjavvv', 'arjav@gmail.com', 1111111111, 'Sisilipuram', 'KL01CK509', 'Duke 390', '21:31', '2024-10-23', '22:55', '2024-10-23', 600, '2024-10-23', '5:55:30 pm'),
+('Abhay', 'abhaysbabu@gmail.com', 2147483647, 'TC 20/1492 SANTHI W-31 SASTRI NAGAR KARAMANA', 'KL01GH543', 'Hero XPULSE', '22:12', '2024-10-23', '23:12', '2024-10-23', 800, '2024-10-23', '8:12:48 pm');
 
 -- --------------------------------------------------------
 
@@ -195,10 +196,12 @@ INSERT INTO `user_login` (`name`, `email`, `password`, `address`, `ph_no`, `city
 ('Anto', 'anto@gmail.com', 'antobinu', 'kudumasree', '12341234', '', '', 695002, '42342342', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\42342342.pdf', 0, 'approved', ''),
 ('Anto1', 'antoo@gmail.com', 'asdfg', 'kudumbavilak', '2342342', 'Thiruvananthapuram', 'Kerala', 695002, '4323423423', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\4323423423.pdf', 1, 'approved', ''),
 ('Anto1', 'antooo@gmail.com', 'asdfg', 'Binu veed, Thachottkavu', '7907694440', 'Alappuzha', 'Kerala', 695002, 'KL0166372734483', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\KL0166372734483.pdf', 1, 'approved', ''),
+('Arjavvv', 'arjav@gmail.com', 'asdfg', 'Sisilipuram', '1111111111', 'Malapuram', 'Kerala', 650002, 'KL012323423', 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\dl_photos\\KL012323423.pdf', 1, 'approved', ''),
 ('Arya Rajeshh', 'arya@gmail.com', 'aryaa', 'christ nagar', '2342342', 'Thiruvananthapuram', 'Kerala', 695002, '23423423', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\23423423.pdf', 1, 'approved', ''),
 ('Aswathy', 'aswathy@gmail.com', '12345', 'Balaramapuram', '8075861928', 'Thiruvananthapuram', 'Kerala', 650002, 'kl4786957', 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\dl_photos\\kl4786957.pdf', 0, 'pending', ''),
 ('Devika', 'devikasuresh5289@gmail.com', 'devuuu', 'kudumasreeeee', '123456', 'Thiruvananthapuram', 'Kerala', 695002, '4323423423', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\4323423423.pdf', 1, 'approved', ''),
 ('', 'rockabhay@gmail.com', 'rock', 'Karyavattom', '7907694440', 'Trivandrum', 'Kerala', 695002, '65465454', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\65465454.pdf', 0, 'pending', ''),
+('Swaroop', 'swaroop@gmail.com', 'asdfg', 'Karamana', '9496110215', 'Palakkad', 'Kerala', 650002, 'KL012323423', 'C:\\Users\\Abhay\\Desktop\\MotoBon\\src\\Bike\\dl_photos\\KL012323423.pdf', 0, 'pending', ''),
 ('Varun', 'varun@gmail.com', 'varunbhai', 'Ranga Swami veed, karamana', '8547132456', 'Trivandrum', 'Kerala', 695002, 'KL0120240008950', 'C:\\Users\\Abhay\\Desktop\\mini\\src\\Bike\\dl_photos\\KL0120240008950.pdf', 1, 'pending', '');
 
 --
